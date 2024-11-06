@@ -33,3 +33,21 @@ npm run build
 ```sh
 npm run lint
 ```
+
+## További elképzelések, amikre nem jutott időm
+
+### Havi nézetben a karikákban a számok helyett minden feladathoz egy blokk jelenne meg, amin az alapadatok láthatók
+
+### Összesítés az oszlop tetején, amely megmutatja, hány órát dolgozott azon a napon összesen
+
+### Nézetválasztó mellett lehetne egy szűrő (projektre, kliensre), amely csak az ezeknek megfelelő elemeket jelenítené meg a naptárban
+
+### Dinamikus projekt, kliens opciók
+
+### Export funkció
+
+### Diagramok:
+
+- Havi / éves ledolgozott órák
+
+- Projektre / kliensre lebontott ledolgozott órák
