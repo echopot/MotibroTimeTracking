@@ -11,6 +11,7 @@
               placeholder="Task Title"
               v-model="event.title"
             />
+            <div v-if="titleError" class="text-danger">The task title is required</div>
           </div>
           <div class="col-2 d-flex justify-content-end" v-if="deletable">
             <button type="button" class="btn btn-outline-danger" @click="deleteEvent">🗑️</button>
@@ -87,6 +88,7 @@ export default {
   },
   setup(props, context) {
     const event = ref({ ...props.selectedEvent })
+    const titleError = ref(false)
 
     // Convert event start and end to local time.
     const eventStart = ref(
@@ -111,14 +113,19 @@ export default {
     }
 
     function saveEvent() {
-      context.emit('save', event.value, eventStart.value, eventEnd.value)
+      if (!event.value.title) {
+        titleError.value = true
+      } else {
+        titleError.value = false
+        context.emit('save', event.value, eventStart.value, eventEnd.value)
+      }
     }
 
     function close() {
       context.emit('cancel')
     }
 
-    return { event, eventStart, eventEnd, deleteEvent, saveEvent, close }
+    return { event, titleError, eventStart, eventEnd, deleteEvent, saveEvent, close }
   },
 }
 </script>
