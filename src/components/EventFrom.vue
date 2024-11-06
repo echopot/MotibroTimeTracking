@@ -47,6 +47,9 @@
                 v-model="eventEnd"
               />
             </div>
+            <div v-if="dateError" class="text-danger">
+              The end date must be after the start date
+            </div>
             <div class="col-12">
               <label for="projectSelect">Choose Project</label>
               <select class="form-select" id="projectSelect" v-model="event.project">
@@ -89,6 +92,7 @@ export default {
   setup(props, context) {
     const event = ref({ ...props.selectedEvent })
     const titleError = ref(false)
+    const dateError = ref(false)
 
     // Convert event start and end to local time.
     const eventStart = ref(
@@ -115,6 +119,8 @@ export default {
     function saveEvent() {
       if (!event.value.title) {
         titleError.value = true
+      } else if (new Date(eventEnd.value) <= new Date(eventStart.value)) {
+        dateError.value = true
       } else {
         titleError.value = false
         context.emit('save', event.value, eventStart.value, eventEnd.value)
@@ -125,7 +131,7 @@ export default {
       context.emit('cancel')
     }
 
-    return { event, titleError, eventStart, eventEnd, deleteEvent, saveEvent, close }
+    return { event, titleError, dateError, eventStart, eventEnd, deleteEvent, saveEvent, close }
   },
 }
 </script>
