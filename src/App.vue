@@ -43,16 +43,16 @@ export default {
     })
 
     const projects = [
-      { id: 0, bg: '#666666', color: '#ffffff', name: 'No Project', class: 'no-project' },
-      { id: 1, bg: '#ff0000', color: '#ffffff', name: 'Project 1', class: 'project-1' },
-      { id: 2, bg: '#00ff00', color: '#000000', name: 'Project 2', class: 'project-2' },
-      { id: 3, bg: '#0000ff', color: '#ffffff', name: 'Project 3', class: 'project-3' },
+      { id: 0, bg: '#eae2b7', color: '#000000', name: 'No Project', class: 'no-project' },
+      { id: 1, bg: '#006d77', color: '#ffffff', name: 'Project 1', class: 'project-1' },
+      { id: 2, bg: '#3a5a40', color: '#000000', name: 'Project 2', class: 'project-2' },
+      { id: 3, bg: '#7f5539', color: '#ffffff', name: 'Project 3', class: 'project-3' },
     ]
     const clients = [
-      { id: 0, bg: '#666666', color: '#ffffff', name: 'No Client', class: 'no-client' },
-      { id: 1, bg: '#bb0000', color: '#ffffff', name: 'Client 1', class: 'client-1' },
-      { id: 2, bg: '#00bb00', color: '#000000', name: 'Client 2', class: 'client-2' },
-      { id: 3, bg: '#0000bb', color: '#ffffff', name: 'Client 3', class: 'client-3' },
+      { id: 0, bg: '#eae2b7', color: '#000000', name: 'No Client', class: 'no-client' },
+      { id: 1, bg: '#83c5be', color: '#000000', name: 'Client 1', class: 'client-1' },
+      { id: 2, bg: '#588157', color: '#000000', name: 'Client 2', class: 'client-2' },
+      { id: 3, bg: '#ddb892', color: '#000000', name: 'Client 3', class: 'client-3' },
     ]
 
     // Dynamically add CSS rules for projects and clients.
