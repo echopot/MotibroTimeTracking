@@ -14,27 +14,35 @@
   </vue-cal>
 </template>
 
-<script setup>
+<script>
 import { ref } from 'vue'
 import VueCal from 'vue-cal'
 
-const { events } = defineProps(['events'])
-const selectedEvent = ref(null)
-const showEventCreationDialog = ref(false)
+export default {
+  name: 'VueCalendar',
+  components: { VueCal },
+  props: ['events', 'projects', 'clients'],
+  setup() {
+    const selectedEvent = ref(null)
+    const showEventCreationDialog = ref(false)
 
-function onEventCreate(event) {
-  console.log('Event created:', event)
-  selectedEvent.value = event
-  showEventCreationDialog.value = true
+    function onEventCreate(event) {
+      console.log('Event created:', event)
+      selectedEvent.value = event
+      showEventCreationDialog.value = true
 
-  return event
-}
+      return event
+    }
 
-function onEventClick(event, e) {
-  console.log('Event clicked:', event)
-  this.selectedEvent = event
+    function onEventClick(event, e) {
+      console.log('Event clicked:', event)
+      selectedEvent.value = event
 
-  // Prevent navigating to narrower view (default vue-cal behavior).
-  e.stopPropagation()
+      // Prevent navigating to narrower view (default vue-cal behavior).
+      e.stopPropagation()
+    }
+
+    return { selectedEvent, showEventCreationDialog, onEventCreate, onEventClick }
+  },
 }
 </script>
