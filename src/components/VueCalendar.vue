@@ -90,6 +90,7 @@ export default {
     }
 
     function closeEventEditDialog() {
+      savedEvents.value = [...props.events]
       selectedEvent.value = null
     }
 
