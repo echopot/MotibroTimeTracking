@@ -5,7 +5,12 @@
   </header>
 
   <main>
-    <VueCalendar :events="events" :projects="projects" :clients="clients" />
+    <vue-calendar
+      :events="events"
+      :projects="projects"
+      :clients="clients"
+      @update-event="updateEvent"
+    />
   </main>
 </template>
 
@@ -18,7 +23,7 @@ export default {
   name: 'App',
   setup() {
     const projects = [
-      { id: 0, bg: '#999999', color: '#ffffff', name: 'No Project', class: 'no-project' },
+      { id: 0, bg: '#666666', color: '#ffffff', name: 'No Project', class: 'no-project' },
       { id: 1, bg: '#ff0000', color: '#ffffff', name: 'Project 1', class: 'project-1' },
       { id: 2, bg: '#00ff00', color: '#000000', name: 'Project 2', class: 'project-2' },
       { id: 3, bg: '#0000ff', color: '#ffffff', name: 'Project 3', class: 'project-3' },
@@ -47,26 +52,34 @@ export default {
     // Create some test events.
     const events = ref([
       {
+        id: 0,
         start: '2024-11-06 11:00',
         end: '2024-11-06 12:00',
         title: 'Test event for a Client',
         content: 'This is a test event for a Client.',
-        project: null,
+        project: projects[0],
         client: clients[1],
         class: clients[1].class,
       },
       {
+        id: 1,
         start: '2024-11-06 14:00',
         end: '2024-11-06 18:00',
         title: 'Test event for a Project',
         content: 'This is a test event for a Project.',
         project: projects[1],
-        client: clients[1],
+        client: clients[0],
         class: projects[1].class,
       },
     ])
 
-    return { events, projects, clients }
+    function updateEvent(event) {
+      event.class = event.project.class !== 'no-project' ? event.project.class : event.client.class
+      const index = events.value.findIndex((e) => e.id === event.id)
+      events.value[index] = event
+    }
+
+    return { events, projects, clients, updateEvent }
   },
 }
 </script>

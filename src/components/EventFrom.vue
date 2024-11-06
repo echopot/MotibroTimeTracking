@@ -1,0 +1,124 @@
+<template>
+  <div class="modal d-block" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header row g-3">
+          <div class="col-11">
+            <input
+              type="text"
+              class="form-control form-control-lg"
+              id="taskTitle"
+              placeholder="Task Title"
+              v-model="event.title"
+            />
+          </div>
+          <div class="col-1 d-flex justify-content-end">
+            <button
+              type="button"
+              class="btn-close"
+              data-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+        </div>
+        <div class="modal-body">
+          <form class="row g-3">
+            <div class="col-12">
+              <label for="contentTextarea">Task Content</label>
+              <textarea
+                class="form-control"
+                id="contentTextarea"
+                placeholder="Task Content"
+                rows="3"
+                v-model="event.content"
+              ></textarea>
+            </div>
+            <div class="col-md-6">
+              <label for="startDatetime" class="form-label">Start datetime</label>
+              <input
+                type="datetime-local"
+                class="form-control"
+                id="startDatetime"
+                v-model="eventStart"
+              />
+            </div>
+            <div class="col-md-6">
+              <label for="endDatetime" class="form-label">End datetime</label>
+              <input
+                type="datetime-local"
+                class="form-control"
+                id="endDatetime"
+                v-model="eventEnd"
+              />
+            </div>
+            <div class="col-12">
+              <label for="projectSelect">Choose Project</label>
+              <select class="form-select" id="projectSelect" v-model="event.project">
+                <option v-for="project in projects" :key="project.id" :value="project">
+                  {{ project.name }}
+                </option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label for="clientSelect">Choose Client</label>
+              <select class="form-select" id="clientSelect" v-model="event.client">
+                <option v-for="client in clients" :key="client.id" :value="client">
+                  {{ client.name }}
+                </option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" @click="save">Save Changes</button>
+          <button type="button" class="btn btn-secondary" @click="close">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { ref } from 'vue'
+
+export default {
+  name: 'EventForm',
+  emits: ['cancel', 'save'],
+  props: {
+    selectedEvent: Object,
+    projects: Array,
+    clients: Array,
+  },
+  setup(props, context) {
+    const event = ref({ ...props.selectedEvent })
+
+    // Convert event start and end to local time.
+    const eventStart = ref(
+      new Date(event.value.start)
+        .toLocaleString('sv-SE', {
+          timeZone: 'Europe/Budapest',
+          hour12: false,
+        })
+        .replace(' ', 'T'),
+    )
+    const eventEnd = ref(
+      new Date(event.value.end)
+        .toLocaleString('sv-SE', {
+          timeZone: 'Europe/Budapest',
+          hour12: false,
+        })
+        .replace(' ', 'T'),
+    )
+
+    function save() {
+      context.emit('save', event.value, eventStart.value, eventEnd.value)
+    }
+
+    function close() {
+      context.emit('cancel')
+    }
+
+    return { event, eventStart, eventEnd, save, close }
+  },
+}
+</script>

@@ -12,22 +12,32 @@
     @event-drag-create="showEventCreationDialog = true"
   >
   </vue-cal>
+  <event-form
+    v-if="selectedEvent != null"
+    :selectedEvent="selectedEvent"
+    :projects="projects"
+    :clients="clients"
+    @save="saveEvent"
+    @cancel="closeEventEditDialog"
+  ></event-form>
 </template>
 
 <script>
 import { ref } from 'vue'
+import EventForm from './EventFrom.vue'
 import VueCal from 'vue-cal'
 
 export default {
   name: 'VueCalendar',
-  components: { VueCal },
+  components: { VueCal, EventForm },
+  emits: ['update-event'],
   props: ['events', 'projects', 'clients'],
-  setup() {
+  setup(props, context) {
     const selectedEvent = ref(null)
     const showEventCreationDialog = ref(false)
 
     function onEventCreate(event) {
-      console.log('Event created:', event)
+      console.log('Event created:')
       selectedEvent.value = event
       showEventCreationDialog.value = true
 
@@ -35,14 +45,33 @@ export default {
     }
 
     function onEventClick(event, e) {
-      console.log('Event clicked:', event)
+      console.log('Event clicked:')
       selectedEvent.value = event
 
       // Prevent navigating to narrower view (default vue-cal behavior).
       e.stopPropagation()
     }
 
-    return { selectedEvent, showEventCreationDialog, onEventCreate, onEventClick }
+    function saveEvent(event, eventStart, eventEnd) {
+      event.start = new Date(eventStart).toString()
+      event.end = new Date(eventEnd).toString()
+      context.emit('update-event', event)
+      closeEventEditDialog()
+    }
+
+    function closeEventEditDialog() {
+      selectedEvent.value = null
+      showEventCreationDialog.value = false
+    }
+
+    return {
+      selectedEvent,
+      showEventCreationDialog,
+      onEventCreate,
+      onEventClick,
+      saveEvent,
+      closeEventEditDialog,
+    }
   },
 }
 </script>
