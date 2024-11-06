@@ -3,7 +3,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header row g-3 d-flex justify-content-between">
-          <div class="col-10">
+          <div :class="deletable ? 'col-10' : 'col-12'">
             <input
               type="text"
               class="form-control form-control-lg"
@@ -12,7 +12,7 @@
               v-model="event.title"
             />
           </div>
-          <div class="col-2 d-flex justify-content-end">
+          <div class="col-2 d-flex justify-content-end" v-if="deletable">
             <button type="button" class="btn btn-outline-danger" @click="deleteEvent">🗑️</button>
           </div>
         </div>
@@ -65,8 +65,8 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" @click="saveEvent">Save Changes</button>
-          <button type="button" class="btn btn-secondary" @click="close">Close</button>
+          <button type="button" class="btn btn-primary" @click="saveEvent">Save</button>
+          <button type="button" class="btn btn-secondary" @click="close">Cancel</button>
         </div>
       </div>
     </div>
@@ -83,6 +83,7 @@ export default {
     selectedEvent: Object,
     projects: Array,
     clients: Array,
+    deletable: Boolean,
   },
   setup(props, context) {
     const event = ref({ ...props.selectedEvent })

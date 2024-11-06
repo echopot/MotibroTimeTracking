@@ -6,19 +6,32 @@
     :disable-views="['years', 'year']"
     hide-title-bar
     :editable-events="{ title: true, drag: true, resize: true, create: true }"
-    :events="events"
+    :events="savedEvents"
     :on-event-click="onEventClick"
-    @event-drag-create="showEventCreationDialog = true"
+    @event-drag-create="onEventCreate"
   >
   </vue-cal>
+  <!-- Form for editing Events -->
   <event-form
     v-if="selectedEvent != null"
     :selectedEvent="selectedEvent"
     :projects="projects"
     :clients="clients"
+    :deletable="true"
     @delete="deleteEvent"
     @save="saveEvent"
     @cancel="closeEventEditDialog"
+  ></event-form>
+  <!-- Form for new Events -->
+  <event-form
+    v-if="newEvent != null"
+    :selectedEvent="newEvent"
+    :projects="projects"
+    :clients="clients"
+    :deletable="false"
+    @delete="deleteNewEvent"
+    @save="createEvent"
+    @cancel="closeEventCreateDialog"
   ></event-form>
 </template>
 
@@ -30,16 +43,17 @@ import VueCal from 'vue-cal'
 export default {
   name: 'VueCalendar',
   components: { VueCal, EventForm },
-  emits: ['delete-event', 'update-event'],
+  emits: ['delete-event', 'update-event', 'create-event'],
   props: ['events', 'projects', 'clients'],
   setup(props, context) {
+    const savedEvents = ref([...props.events])
+    const newEvent = ref(null)
     const selectedEvent = ref(null)
-    const showEventCreationDialog = ref(false)
 
     function onEventCreate(event) {
-      console.log('Event created:')
-      selectedEvent.value = event
-      showEventCreationDialog.value = true
+      event.project = props.projects[0]
+      event.client = props.clients[0]
+      newEvent.value = event
 
       return event
     }
@@ -57,6 +71,17 @@ export default {
       closeEventEditDialog()
     }
 
+    function deleteNewEvent() {
+      newEvent.value = null
+    }
+
+    function createEvent(event, eventStart, eventEnd) {
+      event.start = new Date(eventStart).toString()
+      event.end = new Date(eventEnd).toString()
+      context.emit('create-event', event)
+      closeEventCreateDialog()
+    }
+
     function saveEvent(event, eventStart, eventEnd) {
       event.start = new Date(eventStart).toString()
       event.end = new Date(eventEnd).toString()
@@ -66,17 +91,25 @@ export default {
 
     function closeEventEditDialog() {
       selectedEvent.value = null
-      showEventCreationDialog.value = false
+    }
+
+    function closeEventCreateDialog() {
+      savedEvents.value = [...props.events]
+      newEvent.value = null
     }
 
     return {
+      savedEvents,
+      newEvent,
       selectedEvent,
-      showEventCreationDialog,
       onEventCreate,
       onEventClick,
       deleteEvent,
+      deleteNewEvent,
+      createEvent,
       saveEvent,
       closeEventEditDialog,
+      closeEventCreateDialog,
     }
   },
 }

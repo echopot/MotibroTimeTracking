@@ -11,6 +11,7 @@
       :clients="clients"
       @delete-event="deleteEvent"
       @update-event="updateEvent"
+      @create-event="createEvent"
     />
   </main>
 </template>
@@ -85,7 +86,13 @@ export default {
       events.value[index] = event
     }
 
-    return { events, projects, clients, deleteEvent, updateEvent }
+    function createEvent(event) {
+      event.id = events.value.length
+      event.class = event.project.class !== 'no-project' ? event.project.class : event.client.class
+      events.value.push(event)
+    }
+
+    return { events, projects, clients, deleteEvent, updateEvent, createEvent }
   },
 }
 </script>
