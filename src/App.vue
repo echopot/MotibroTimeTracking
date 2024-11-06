@@ -13,6 +13,18 @@
       @update-event="updateEvent"
       @create-event="createEvent"
     />
+    <div
+      v-if="showAlert.visible"
+      :class="
+        'alert ' +
+        showAlert.className +
+        ' fade show w-auto d-flex align-items-center fixed-bottom mx-auto'
+      "
+      role="alert"
+      style="max-width: fit-content"
+    >
+      {{ showAlert.message }}
+    </div>
   </main>
 </template>
 
@@ -24,6 +36,12 @@ export default {
   components: { VueCalendar },
   name: 'App',
   setup() {
+    const showAlert = ref({
+      message: '',
+      className: 'alert-success',
+      visible: false,
+    })
+
     const projects = [
       { id: 0, bg: '#666666', color: '#ffffff', name: 'No Project', class: 'no-project' },
       { id: 1, bg: '#ff0000', color: '#ffffff', name: 'Project 1', class: 'project-1' },
@@ -78,21 +96,37 @@ export default {
     function deleteEvent(event) {
       const index = events.value.findIndex((e) => e.id === event.id)
       events.value.splice(index, 1)
+      showAlertMessage('Event deleted successfully!', 'alert-success')
     }
 
     function updateEvent(event) {
       event.class = event.project.class !== 'no-project' ? event.project.class : event.client.class
       const index = events.value.findIndex((e) => e.id === event.id)
       events.value[index] = event
+      showAlertMessage('Event updated successfully!', 'alert-success')
     }
 
     function createEvent(event) {
       event.id = events.value.length
       event.class = event.project.class !== 'no-project' ? event.project.class : event.client.class
       events.value.push(event)
+      showAlertMessage('Event created successfully!', 'alert-success')
     }
 
-    return { events, projects, clients, deleteEvent, updateEvent, createEvent }
+    function showAlertMessage(message, className) {
+      showAlert.value.message = message
+      showAlert.value.className = className
+      showAlert.value.visible = true
+      hideAlertAfterDelay()
+    }
+
+    function hideAlertAfterDelay() {
+      setTimeout(() => {
+        showAlert.value.visible = false
+      }, 3000)
+    }
+
+    return { showAlert, events, projects, clients, deleteEvent, updateEvent, createEvent }
   },
 }
 </script>
