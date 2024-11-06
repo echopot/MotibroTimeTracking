@@ -7,7 +7,6 @@
     hide-title-bar
     :editable-events="{ title: true, drag: true, resize: true, create: true }"
     :events="events"
-    :on-event-create="onEventCreate"
     :on-event-click="onEventClick"
     @event-drag-create="showEventCreationDialog = true"
   >
@@ -17,6 +16,7 @@
     :selectedEvent="selectedEvent"
     :projects="projects"
     :clients="clients"
+    @delete="deleteEvent"
     @save="saveEvent"
     @cancel="closeEventEditDialog"
   ></event-form>
@@ -30,7 +30,7 @@ import VueCal from 'vue-cal'
 export default {
   name: 'VueCalendar',
   components: { VueCal, EventForm },
-  emits: ['update-event'],
+  emits: ['delete-event', 'update-event'],
   props: ['events', 'projects', 'clients'],
   setup(props, context) {
     const selectedEvent = ref(null)
@@ -52,6 +52,11 @@ export default {
       e.stopPropagation()
     }
 
+    function deleteEvent(event) {
+      context.emit('delete-event', event)
+      closeEventEditDialog()
+    }
+
     function saveEvent(event, eventStart, eventEnd) {
       event.start = new Date(eventStart).toString()
       event.end = new Date(eventEnd).toString()
@@ -69,6 +74,7 @@ export default {
       showEventCreationDialog,
       onEventCreate,
       onEventClick,
+      deleteEvent,
       saveEvent,
       closeEventEditDialog,
     }

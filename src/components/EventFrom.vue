@@ -2,8 +2,8 @@
   <div class="modal d-block" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <div class="modal-header row g-3">
-          <div class="col-11">
+        <div class="modal-header row g-3 d-flex justify-content-between">
+          <div class="col-10">
             <input
               type="text"
               class="form-control form-control-lg"
@@ -12,13 +12,8 @@
               v-model="event.title"
             />
           </div>
-          <div class="col-1 d-flex justify-content-end">
-            <button
-              type="button"
-              class="btn-close"
-              data-dismiss="modal"
-              aria-label="Close"
-            ></button>
+          <div class="col-2 d-flex justify-content-end">
+            <button type="button" class="btn btn-outline-danger" @click="deleteEvent">🗑️</button>
           </div>
         </div>
         <div class="modal-body">
@@ -70,7 +65,7 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" @click="save">Save Changes</button>
+          <button type="button" class="btn btn-primary" @click="saveEvent">Save Changes</button>
           <button type="button" class="btn btn-secondary" @click="close">Close</button>
         </div>
       </div>
@@ -83,7 +78,7 @@ import { ref } from 'vue'
 
 export default {
   name: 'EventForm',
-  emits: ['cancel', 'save'],
+  emits: ['delete', 'cancel', 'save'],
   props: {
     selectedEvent: Object,
     projects: Array,
@@ -110,7 +105,11 @@ export default {
         .replace(' ', 'T'),
     )
 
-    function save() {
+    function deleteEvent() {
+      context.emit('delete', event.value)
+    }
+
+    function saveEvent() {
       context.emit('save', event.value, eventStart.value, eventEnd.value)
     }
 
@@ -118,7 +117,7 @@ export default {
       context.emit('cancel')
     }
 
-    return { event, eventStart, eventEnd, save, close }
+    return { event, eventStart, eventEnd, deleteEvent, saveEvent, close }
   },
 }
 </script>

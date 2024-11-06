@@ -9,6 +9,7 @@
       :events="events"
       :projects="projects"
       :clients="clients"
+      @delete-event="deleteEvent"
       @update-event="updateEvent"
     />
   </main>
@@ -73,13 +74,18 @@ export default {
       },
     ])
 
+    function deleteEvent(event) {
+      const index = events.value.findIndex((e) => e.id === event.id)
+      events.value.splice(index, 1)
+    }
+
     function updateEvent(event) {
       event.class = event.project.class !== 'no-project' ? event.project.class : event.client.class
       const index = events.value.findIndex((e) => e.id === event.id)
       events.value[index] = event
     }
 
-    return { events, projects, clients, updateEvent }
+    return { events, projects, clients, deleteEvent, updateEvent }
   },
 }
 </script>
