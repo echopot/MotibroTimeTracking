@@ -1,4 +1,6 @@
-<script setup></script>
+<script setup>
+import VueCalendar from './components/VueCalendar.vue'
+</script>
 
 <template>
   <header class="d-flex justify-content-center align-items-center">
@@ -6,5 +8,7 @@
     <h1>MotiBro teszt feladat</h1>
   </header>
 
-  <main></main>
+  <main>
+    <VueCalendar />
+  </main>
 </template>
