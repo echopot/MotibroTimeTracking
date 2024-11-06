@@ -6,6 +6,7 @@
     :disable-views="['years', 'year']"
     hide-title-bar
     :editable-events="{ title: true, drag: true, resize: true, create: true }"
+    :events="events"
     :on-event-create="onEventCreate"
     :on-event-click="onEventClick"
     @event-drag-create="showEventCreationDialog = true"
@@ -17,6 +18,7 @@
 import { ref } from 'vue'
 import VueCal from 'vue-cal'
 
+const { events } = defineProps(['events'])
 const selectedEvent = ref(null)
 const showEventCreationDialog = ref(false)
 
