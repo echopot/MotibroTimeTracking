@@ -1,0 +1,13 @@
+.vuecal__cell-date {
+  height: 3em;
+}
+
+.vuecal__cell-events-count {
+  background-color: #42b983 !important;
+  color: #fff !important;
+  font-size: 0.8em;
+}
+
+.vuecal__event {
+  border-radius: 0.25em;
+}
